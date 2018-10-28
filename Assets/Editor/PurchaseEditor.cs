@@ -7,8 +7,6 @@ using UnityEditor;
 [CustomEditor(typeof(Shop))]
 public class PurchaseEditor : Editor
 {
-    public List<Purchase> allProducts = new List<Purchase>();
-
     public Shop Target {
 
         get { return target as Shop; }
@@ -32,20 +30,21 @@ public class PurchaseEditor : Editor
 
     void AddProduct()
     {
-        var product = CreateInstance<Purchase>();
+        Purchase product = new Purchase();
         product.currency = Target.currency;
         product.productName = Target.productName;
         product.price = Target.price;
         product.salePricel = Target.salePricel;
         product.isOnSale = Target.isOnSale;
         product.pictureId = Target.pictureId;
-        allProducts.Add(product);
-        product.name = Target.productName;
-        AssetDatabase.AddObjectToAsset(product, Target);
-        AssetDatabase.SaveAssets();
-        AssetDatabase.Refresh();
-        Debug.Log(allProducts.Count);
-
+        Target.all.Add(product);
+        //product.name = Target.productName;
+        //AssetDatabase.AddObjectToAsset(product, Target);
+        //AssetDatabase.SaveAssets();
+        //AssetDatabase.Refresh();
+        Debug.Log(Target.all.Count);
+        
+        
     }
 
 
@@ -56,20 +55,19 @@ public class PurchaseEditor : Editor
         Target.pictureId = 0;
         Target.price = 0;
         Target.isOnSale = false;
-
-
     }
 
     void Remove() {
-        if (allProducts.Count <= 0)
+        if (Target.all.Count <= 0)
         {
             return;
         }
-        var temp = allProducts[allProducts.Count - 1];
-        allProducts.RemoveAt(allProducts.Count - 1);
+        var temp = Target.all[Target.all.Count - 1];
+        Target.all.RemoveAt(Target.all.Count - 1);
         DestroyImmediate(temp, true);
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
+        Debug.Log(Target.all.Count);
     }
 
 }
